@@ -1,0 +1,56 @@
+.nnr-wrap a.nnr-tab:hover,
+.nnr-wrap a.nnr-current-tab:hover {
+	text-decoration: none;
+	color: #0399CB;
+}
+
+.nnr-wrap a.nnr-tab {
+	color: #4aaeee;
+}
+
+.nnr-wrap a.nnr-current-tab {
+	color:#939393;
+}
+
+.nnr-wrap .row-actions {
+	padding-top: 10px;
+}
+
+.nnr-wrap a.nnr-row-action {
+	font-size: 14px;
+	color: #777;
+	padding: 0 4px;
+}
+
+.nnr-wrap a.nnr-row-action:hover {
+	text-decoration: none;
+	cursor: pointer;
+	color:#0399CB;
+}
+
+.nnr-wrap .nnr-change-status:hover {
+	text-decoration: none;
+	border: none;
+	cursor: pointer;
+}
+
+.nnr-change-status[data-status="activate"] {
+	color: #ddd;
+}
+
+.nnr-change-status[data-status="activate"]:hover {
+	color: #40B000;
+}
+
+.nnr-change-status[data-status="deactivate"]:hover {
+	color: #ff2525;
+}
+
+.conversion_rate.column-conversion_rate {
+	color: #7AB928;
+	font-weight: bold;
+}
+
+.nnr-active-row {
+	border-left: 4px solid #4aaeee;
+}

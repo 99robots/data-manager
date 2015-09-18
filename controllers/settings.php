@@ -34,6 +34,16 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	public $prefix = '';
 
 	/**
+	 * text_domain
+	 *
+	 * (default value: '')
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $text_domain = '';
+
+	/**
 	 * Called when the object is first created
 	 *
 	 * @access public
@@ -55,20 +65,37 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function include_scripts() {
 
-		wp_register_style( $this->prefix . 'bootstrap-datepicker-css', plugins_url( 'css/bootstrap-datetimepicker.min.css', dirname(__FILE__)) );
-		wp_enqueue_style( $this->prefix . 'bootstrap-datepicker-css' );
+		wp_register_style( 'bootstrap-datepicker-css', plugins_url( 'css/bootstrap-datetimepicker.min.css', dirname(__FILE__)) );
+		wp_enqueue_style( 'bootstrap-datepicker-css' );
 
 		wp_register_script( 'moment', plugins_url( 'js/moment.js', dirname(__FILE__)) );
 		wp_enqueue_script( 'moment' );
 
-		wp_register_script( $this->prefix . 'bootstrap-datepicker-js', plugins_url( 'js/bootstrap-datetimepicker.min.js', dirname(__FILE__)), array('moment') );
-		wp_enqueue_script( $this->prefix . 'bootstrap-datepicker-js' );
+		wp_register_script( 'bootstrap-datepicker-js', plugins_url( 'js/bootstrap-datetimepicker.min.js', dirname(__FILE__)), array('moment') );
+		wp_enqueue_script( 'bootstrap-datepicker-js' );
 
-		wp_register_script( $this->prefix . 'data-manager-settings-js', plugins_url( 'js/settings.js', dirname(__FILE__)), array($this->prefix . 'bootstrap-datepicker-js') );
-		wp_enqueue_script( $this->prefix . 'data-manager-settings-js' );
-		wp_localize_script( $this->prefix . 'data-manager-settings-js', 'nnr_data_manager_data' , array(
+		wp_register_script( 'data-manager-settings-js', plugins_url( 'js/settings.js', dirname(__FILE__)), array('bootstrap-datepicker-js') );
+		wp_enqueue_script( 'data-manager-settings-js' );
+		wp_localize_script( 'data-manager-settings-js', 'nnr_data_manager_data' , array(
 			'prefix'	=> $this->prefix,
 		));
+
+	}
+
+	/**
+	 * Display the Data Manager Settings
+	 *
+	 * @access public
+	 * @param mixed $data_settings
+	 * @param string $args (default: array('default' => array())
+	 * @param array 'help-text' (default: > array()))
+	 * @return void
+	 */
+	function display_all_settings( $data_settings, $args = array('default' => array(), 'help-text' => array()) ) {
+
+		echo $this->display_name($data_settings['name']);
+		echo $this->display_start_date($data_settings['start_date']);
+		echo $this->display_end_date($data_settings['end_date']);
 
 	}
 
@@ -144,7 +171,7 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 			$help_text = '<em class="help-block">' . __($help_text, $this->text_domain) . '</em>';
 		}
 
-		$code = '<!-- Start Date -->
+		$code = '<!-- End Date -->
 		<div class="form-group">
 			<label for="' . $this->prefix . 'end-date" class="col-sm-3 control-label">' . __('End Date', $this->text_domain) . '</label>
 			<div class="col-sm-3">

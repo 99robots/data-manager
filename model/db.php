@@ -191,6 +191,30 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	}
 
 	/**
+	 * Get specfic data based on id
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	function get_data_from_id( $id ){
+
+		global $wpdb;
+
+		$data = $wpdb->get_results($wpdb->prepare("SELECT * FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id), 'ARRAY_A');
+
+		if ( $data ) {
+
+			$parsed_data = $this->parse_data( $data );
+
+			return $parsed_data[0];
+		} else {
+			return null;
+		}
+
+	}
+
+	/**
 	 * Get active data
 	 *
 	 * @since 1.0.0
@@ -205,6 +229,23 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 		$data = $wpdb->get_results("SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1", 'ARRAY_A');
 
 		return $this->parse_data( $data );
+	}
+
+	/**
+	 * Set data to active
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	function set_active( $id ) {
+
+		global $wpdb;
+
+		$result = $wpdb->query($wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 1 WHERE `id` = %d", $id));
+
+		return $result;
+
 	}
 
 	/**
@@ -225,6 +266,23 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	}
 
 	/**
+	 * Set data to inactive
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	function set_inactive( $id ) {
+
+		global $wpdb;
+
+		$result = $wpdb->query($wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 0 WHERE `id` = %d", $id));
+
+		return $result;
+
+	}
+
+	/**
 	 * Get data in date range
 	 *
 	 * @since 1.0.0
@@ -242,6 +300,23 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 		$data = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1 AND `start_date` >= %s AND `end_date` <= %s", $start_date, $end_date ), 'ARRAY_A');
 
 		return $this->parse_data( $data );
+	}
+
+	/**
+	 * Delete some data
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	function delete_data( $id ) {
+
+		global $wpdb;
+
+		$result = $wpdb->query($wpdb->prepare("DELETE FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id));
+
+		return $result;
+
 	}
 
 	/**
