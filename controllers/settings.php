@@ -71,10 +71,10 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 		wp_register_script( 'moment', plugins_url( 'js/moment.js', dirname(__FILE__)) );
 		wp_enqueue_script( 'moment' );
 
-		wp_register_script( 'bootstrap-datepicker-js', plugins_url( 'js/bootstrap-datetimepicker.min.js', dirname(__FILE__)), array('moment') );
+		wp_register_script( 'bootstrap-datepicker-js', plugins_url( 'js/bootstrap-datetimepicker.min.js', dirname(__FILE__)), array('jquery', 'moment') );
 		wp_enqueue_script( 'bootstrap-datepicker-js' );
 
-		wp_register_script( 'data-manager-settings-js', plugins_url( 'js/settings.js', dirname(__FILE__)), array('bootstrap-datepicker-js') );
+		wp_register_script( 'data-manager-settings-js', plugins_url( 'js/settings.js', dirname(__FILE__)), array('jquery', 'bootstrap-datepicker-js') );
 		wp_enqueue_script( 'data-manager-settings-js' );
 		wp_localize_script( 'data-manager-settings-js', 'nnr_data_manager_data' , array(
 			'prefix'	=> $this->prefix,

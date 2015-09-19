@@ -195,7 +195,7 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 			'status'             => __( 'ON / OFF', $this->text_domain),
 			'name'               => __( 'Name', $this->text_domain),
 			'impressions'        => __( 'Impressions', $this->text_domain),
-			'conversions'        => __( 'Converions', $this->text_domain),
+			'conversions'        => __( 'Conversions', $this->text_domain),
 			'conversion_rate'    => __( 'Conversion Rate', $this->text_domain),
 			'start_date'         => __( 'Start Date', $this->text_domain),
 			'end_date'        	 => __( 'End Date', $this->text_domain),
@@ -280,9 +280,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 
         // Duplicate
 
-        $actions['edit_3'] = sprintf('<a data-id="%s" class="nnr-row-action nnr-duplicate fa fa-files-o" data-toggle="tooltip" data-placement="bottom" title="' . __('Duplicate', $this->text_domain) . '"></a>',
+        $actions['edit_3'] = sprintf('<a data-id="%s" class="nnr-row-action nnr-duplicate fa fa-files-o" data-toggle="tooltip" data-placement="bottom" title="' . __('Duplicate', $this->text_domain) . '" href="%s"></a>',
         	$item['id'],
-        	wp_create_nonce($this->prefix . 'duplicate')
+        	get_admin_url() . 'admin.php?page=' . $this->dashboard_page . '&action=duplicate&data_id=' . $item['id'] . '&wp_nonce=' . wp_create_nonce($this->prefix . 'duplicate')
         );
 
         // Stats

@@ -3,11 +3,11 @@ jQuery(document).ready(function($){
 	// Datetimepicker
 
 	$('#' + nnr_data_manager_data.prefix + 'start-datepicker').datetimepicker({
-        format: 'MM/DD/YYYY h:mm:ss a',
+        format: 'YYYY-MM-DD H:mm:ss',
     });
 
 	$('#' + nnr_data_manager_data.prefix + 'end-datepicker').datetimepicker({
-        format: 'MM/DD/YYYY h:mm:ss a',
+        format: 'YYYY-MM-DD H:mm:ss',
         useCurrent: false,
     });
 
