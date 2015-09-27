@@ -243,7 +243,7 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 			$data = '<a href="' . get_admin_url() . 'admin.php?page=' . $this->dashboard_page . '&action=activate&data_id=' . $item['id'] . '&wp_nonce=' . wp_create_nonce($this->prefix . 'activate') . '" data-id="' . $item['id'] . '" data-status="activate" class="nnr-change-status fa fa-2x fa-toggle-off" data-toggle="tooltip" data-placement="bottom" title="' . __('Activate', $this->text_domain) . '"></a>';
 		}
 
-        return $data . $test;
+        return $data;
 
 	}
 

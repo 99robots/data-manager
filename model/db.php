@@ -161,7 +161,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 				`args` = %s
 			WHERE id = %d",
 				$data['name'],
-				$dataval['active'],
+				$data['active'],
 				date($this->data_format, strtotime($data['start_date'])),
 				date($this->data_format, strtotime($data['end_date'])),
 				serialize($data['display_conditions']),
@@ -294,10 +294,10 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 
 		global $wpdb;
 
-		$start_date = date($this->data_format, strtotime($start_date));
-		$end_date = date($this->data_format, strtotime($end_date));
+		//$start_date = date($this->data_format, strtotime($start_date));
+		//$end_date = date($this->data_format, strtotime($end_date));
 
-		$data = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1 AND `start_date` >= %s AND `end_date` <= %s", $start_date, $end_date ), 'ARRAY_A');
+		$data = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1 AND `start_date` <= %s AND `end_date` >= %s", $start_date, $end_date ), 'ARRAY_A');
 
 		return $this->parse_data( $data );
 	}

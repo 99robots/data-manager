@@ -105,20 +105,28 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @access public
 	 * @return void
 	 */
-	function display_name( $name, $default = '', $help_text = null ) {
+	function display_name( $name, $default = '', $help_text = null, $format = 'inline' ) {
 
 		if ( isset($help_text) ) {
 			$help_text = '<em class="help-block">' . __($help_text, $this->text_domain) . '</em>';
 		}
 
-		$code = '<!-- Name -->
-		<div class="form-group">
-			<label for="' . $this->prefix . 'name" class="col-sm-3 control-label">' . __('Name', $this->text_domain) . '</label>
-			<div class="col-sm-9">
-				<input class="form-control" id="' . $this->prefix . 'name" name="' . $this->prefix . 'name" value="' . (isset($name) ? esc_attr($name) : $default ) . '">' .
-				$help_text .
-			'</div>
-		</div>';
+		if ( $format == 'inline' ) {
+			$code = '<!-- Name -->
+			<div class="form-group">
+				<label for="' . $this->prefix . 'name" class="col-sm-3 control-label">' . __('Name', $this->text_domain) . '</label>
+				<div class="col-sm-9">
+					<input class="form-control" id="' . $this->prefix . 'name" name="' . $this->prefix . 'name" value="' . (isset($name) ? esc_attr($name) : $default ) . '">' .
+					$help_text .
+				'</div>
+			</div>';
+		} else {
+			$code = '<!-- Name -->
+			<div class="nnr-block-group">
+				<label for="' . $this->prefix . 'name" class="control-label">' . __('Name', $this->text_domain) . '</label>
+				<input class="form-control" id="' . $this->prefix . 'name" name="' . $this->prefix . 'name" value="' . (isset($name) ? esc_attr($name) : $default ) . '">' . $help_text .
+			'</div>';
+		}
 
 		return $code;
 	}
@@ -129,7 +137,7 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @access public
 	 * @return void
 	 */
-	function display_start_date( $start_date, $default = null, $help_text = null ) {
+	function display_start_date( $start_date, $default = null, $help_text = null, $format = 'inline' ) {
 
 		if ( !isset($default) ) {
 			$default = date('m/d/Y h:i A', strtotime(current_time('mysql')));
@@ -139,17 +147,29 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 			$help_text = '<em class="help-block">' . __($help_text, $this->text_domain) . '</em>';
 		}
 
-		$code = '<!-- Start Date -->
-		<div class="form-group">
-			<label for="' . $this->prefix . 'start-date" class="col-sm-3 control-label">' . __('Start Date', $this->text_domain) . '</label>
-			<div class="col-sm-3">
+		if ( $format == 'inline' ) {
+			$code = '<!-- Start Date -->
+			<div class="form-group">
+				<label for="' . $this->prefix . 'start-date" class="col-sm-3 control-label">' . __('Start Date', $this->text_domain) . '</label>
+				<div class="col-sm-9">
+					<div id="' . $this->prefix . 'start-datepicker" class="date input-group">
+						<input id="' . $this->prefix . 'start-date" name="' . $this->prefix . 'start-date" type="text" class="' . $this->prefix . 'start-date form-control" value="' . ( isset($start_date) ? esc_attr($start_date) : $default ) . '"/>
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>' .
+					$help_text .
+				'</div>
+			</div>';
+		} else {
+			$code = '<!-- Start Date -->
+			<div class="nnr-block-group">
+				<label for="' . $this->prefix . 'start-date" class="control-label">' . __('Start Date', $this->text_domain) . '</label>
 				<div id="' . $this->prefix . 'start-datepicker" class="date input-group">
-					<input id="' . $this->prefix . 'start-date" name="' . $this->prefix . 'start-date" type="text" class="' . $this->prefix . 'start-date form-control" value="' . ( isset($start_date) ? esc_attr($start_date) : $default ) . '"/>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-				</div>' .
+						<input id="' . $this->prefix . 'start-date" name="' . $this->prefix . 'start-date" type="text" class="' . $this->prefix . 'start-date form-control" value="' . ( isset($start_date) ? esc_attr($start_date) : $default ) . '"/>
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>' .
 				$help_text .
-			'</div>
-		</div>';
+			'</div>';
+		}
 
 		return $code;
 
@@ -161,7 +181,7 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @access public
 	 * @return void
 	 */
-	function display_end_date( $end_date, $default = null, $help_text = null ) {
+	function display_end_date( $end_date, $default = null, $help_text = null, $format = 'inline' ) {
 
 		if ( !isset($default) ) {
 			$default = date("m/d/Y h:i A", mktime(0, 0, 0, date("m"), date("d"), date("Y")+20));
@@ -171,17 +191,29 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 			$help_text = '<em class="help-block">' . __($help_text, $this->text_domain) . '</em>';
 		}
 
-		$code = '<!-- End Date -->
-		<div class="form-group">
-			<label for="' . $this->prefix . 'end-date" class="col-sm-3 control-label">' . __('End Date', $this->text_domain) . '</label>
-			<div class="col-sm-3">
+		if ( $format == 'inline' ) {
+			$code = '<!-- End Date -->
+			<div class="form-group">
+				<label for="' . $this->prefix . 'end-date" class="col-sm-3 control-label">' . __('End Date', $this->text_domain) . '</label>
+				<div class="col-sm-9">
+					<div id="' . $this->prefix . 'end-datepicker" class="date input-group">
+						<input id="' . $this->prefix . 'end-date" name="' . $this->prefix . 'end-date" type="text" class="' . $this->prefix . 'end-date form-control" value="' . ( isset($end_date) ? esc_attr($end_date) : $default ) . '"/>
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>' .
+					$help_text .
+				'</div>
+			</div>';
+		} else {
+			$code = '<!-- End Date -->
+			<div class="nnr-block-group">
+				<label for="' . $this->prefix . 'end-date" class="control-label">' . __('End Date', $this->text_domain) . '</label>
 				<div id="' . $this->prefix . 'end-datepicker" class="date input-group">
 					<input id="' . $this->prefix . 'end-date" name="' . $this->prefix . 'end-date" type="text" class="' . $this->prefix . 'end-date form-control" value="' . ( isset($end_date) ? esc_attr($end_date) : $default ) . '"/>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 				</div>' .
 				$help_text .
-			'</div>
-		</div>';
+			'</div>';
+		}
 
 		return $code;
 
