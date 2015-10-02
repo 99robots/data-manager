@@ -215,6 +215,27 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	}
 
 	/**
+	 * Returns the name of a data object from the id
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	function get_name_from_id( $id ) {
+
+		global $wpdb;
+
+		$data = $wpdb->get_results($wpdb->prepare("SELECT `name` FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id), 'ARRAY_A');
+
+		if ( $data ) {
+			return $data[0]['name'];
+		} else {
+			return 'No Name Found';
+		}
+
+	}
+
+	/**
 	 * Get active data
 	 *
 	 * @since 1.0.0
