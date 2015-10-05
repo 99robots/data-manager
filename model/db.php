@@ -68,11 +68,11 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function __construct($table_name) {
 
-		do_action('nnr_data_man_before_new_db_model');
+		do_action('nnr_data_man_before_new_db_model_v1');
 
 		$this->table_name = $table_name;
 
-		do_action('nnr_data_man_after_new_db_model');
+		do_action('nnr_data_man_after_new_db_model_v1');
 	}
 
 	/**
@@ -84,11 +84,11 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function create_table() {
 
-		do_action('nnr_data_man_before_db_create_table');
+		do_action('nnr_data_man_before_db_create_table_v1');
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_db_create_table', "
+		$result = $wpdb->query( apply_filters('nnr_data_man_db_create_table_v1', "
 			CREATE TABLE IF NOT EXISTS `" . $this->get_table_name() . "` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
 				`name` varchar(60) NOT NULL DEFAULT '',
@@ -101,7 +101,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 			) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci AUTO_INCREMENT=1;
 		") );
 
-		do_action('nnr_data_man_after_db_create_table');
+		do_action('nnr_data_man_after_db_create_table_v1');
 
 		return $result;
 	}
@@ -115,15 +115,15 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function add_data( $data = array() ) {
 
-		do_action('nnr_data_man_before_db_add_data');
+		do_action('nnr_data_man_before_db_add_data_v1');
 
 		$data = $this->validate_data($data);
 
-		$data = apply_filters('nnr_data_man_db_add_data', $data);
+		$data = apply_filters('nnr_data_man_db_add_data_v1', $data);
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_db_add_data_query', $wpdb->prepare("INSERT INTO `" . $this->get_table_name() . "` (
+		$result = $wpdb->query( apply_filters('nnr_data_man_db_add_data_query_v1', $wpdb->prepare("INSERT INTO `" . $this->get_table_name() . "` (
 				`name`,
 				`active`,
 				`start_date`,
@@ -139,7 +139,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 				serialize($data['args'])
 		) ) );
 
-		do_action('nnr_data_man_after_db_add_data');
+		do_action('nnr_data_man_after_db_add_data_v1');
 
 		// Return the recently created id for this entry
 
@@ -157,9 +157,11 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	public function update_data( $id = null, $data = array() ) {
 
-		do_action('nnr_data_man_before_db_update_data');
+		do_action('nnr_data_man_before_db_update_data_v1');
 
 		$data = $this->validate_data($data);
+
+		$data = apply_filters('nnr_data_man_db_update_data_v1', $data);
 
 		if ( !isset($id) || empty($id) ) {
 			return false;
@@ -167,7 +169,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_db_update_data_query', $wpdb->prepare(
+		$result = $wpdb->query( apply_filters('nnr_data_man_db_update_data_query_v1', $wpdb->prepare(
 			"UPDATE `" . $this->get_table_name() . "` SET
 				`name` = %s,
 				`active` = %d,
@@ -185,7 +187,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 				$id
 		) ) );
 
-		do_action('nnr_data_man_after_db_update_data');
+		do_action('nnr_data_man_after_db_update_data_v1');
 
 		return $result;
 	}
@@ -200,15 +202,15 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function get_data() {
 
-		do_action('nnr_data_man_before_db_get_data');
+		do_action('nnr_data_man_before_db_get_data_v1');
 
 		global $wpdb;
 
-		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_data_query', "SELECT * FROM `" . $this->get_table_name() . "`"), 'ARRAY_A');
+		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_data_query_v1', "SELECT * FROM `" . $this->get_table_name() . "`"), 'ARRAY_A');
 
-		do_action('nnr_data_man_after_db_get_data');
+		do_action('nnr_data_man_after_db_get_data_v1');
 
-		return apply_filters('nnr_data_man_db_get_data', $this->parse_data( $data ));
+		return apply_filters('nnr_data_man_db_get_data_v1', $this->parse_data( $data ));
 	}
 
 	/**
@@ -220,21 +222,21 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function get_data_from_id( $id ){
 
-		do_action('nnr_data_man_before_db_get_data_from_id');
+		do_action('nnr_data_man_before_db_get_data_from_id_v1');
 
 		global $wpdb;
 
-		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_data_from_id_query', $wpdb->prepare("SELECT * FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id)), 'ARRAY_A');
+		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_data_from_id_query_v1', $wpdb->prepare("SELECT * FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id)), 'ARRAY_A');
 
-		do_action('nnr_data_man_after_db_get_data_from_id');
+		do_action('nnr_data_man_after_db_get_data_from_id_v1');
 
 		if ( $data ) {
 
 			$parsed_data = $this->parse_data( $data );
 
-			return apply_filters('nnr_data_man_db_get_data_from_id', $parsed_data[0]);
+			return apply_filters('nnr_data_man_db_get_data_from_id_v1', $parsed_data[0]);
 		} else {
-			return apply_filters('nnr_data_man_db_get_data_from_id', null);
+			return apply_filters('nnr_data_man_db_get_data_from_id_v1', null);
 		}
 
 	}
@@ -248,18 +250,18 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function get_name_from_id( $id ) {
 
-		do_action('nnr_data_man_before_db_get_name_from_id');
+		do_action('nnr_data_man_before_db_get_name_from_id_v1');
 
 		global $wpdb;
 
-		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_name_from_id_query', $wpdb->prepare("SELECT `name` FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id)), 'ARRAY_A');
+		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_name_from_id_query_v1', $wpdb->prepare("SELECT `name` FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id)), 'ARRAY_A');
 
-		do_action('nnr_data_man_after_db_get_name_from_id');
+		do_action('nnr_data_man_after_db_get_name_from_id_v1');
 
 		if ( $data ) {
-			return apply_filters('nnr_data_man_db_get_name_from_id', $data[0]['name']);
+			return apply_filters('nnr_data_man_db_get_name_from_id_v1', $data[0]['name']);
 		} else {
-			return apply_filters('nnr_data_man_db_get_name_from_id', 'No Name Found');
+			return apply_filters('nnr_data_man_db_get_name_from_id_v1', 'No Name Found');
 		}
 
 	}
@@ -274,15 +276,15 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function get_active_data() {
 
-		do_action('nnr_data_man_before_db_get_active_data');
+		do_action('nnr_data_man_before_db_get_active_data_v1');
 
 		global $wpdb;
 
-		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_active_data_query', "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1"), 'ARRAY_A');
+		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_active_data_query_v1', "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1"), 'ARRAY_A');
 
-		do_action('nnr_data_man_after_db_get_active_data');
+		do_action('nnr_data_man_after_db_get_active_data_v1');
 
-		return apply_filters('nnr_data_man_db_get_active_data', $this->parse_data( $data ));
+		return apply_filters('nnr_data_man_db_get_active_data_v1', $this->parse_data( $data ));
 	}
 
 	/**
@@ -294,13 +296,13 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function set_active( $id ) {
 
-		do_action('nnr_data_man_before_db_set_active');
+		do_action('nnr_data_man_before_db_set_active_v1');
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_db_set_active_query', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 1 WHERE `id` = %d"), $id));
+		$result = $wpdb->query( apply_filters('nnr_data_man_db_set_active_query_v1', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 1 WHERE `id` = %d"), $id));
 
-		do_action('nnr_data_man_after_db_set_active');
+		do_action('nnr_data_man_after_db_set_active_v1');
 
 		return $result;
 
@@ -316,15 +318,15 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function get_inactive_data() {
 
-		do_action('nnr_data_man_before_db_get_inactive_data');
+		do_action('nnr_data_man_before_db_get_inactive_data_v1');
 
 		global $wpdb;
 
-		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_inactive_data_query', "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 0"), 'ARRAY_A');
+		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_inactive_data_query_v1', "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 0"), 'ARRAY_A');
 
-		do_action('nnr_data_man_after_db_get_inactive_data');
+		do_action('nnr_data_man_after_db_get_inactive_data_v1');
 
-		return apply_filters('nnr_data_man_db_get_inactive_data', $this->parse_data( $data ));
+		return apply_filters('nnr_data_man_db_get_inactive_data_v1', $this->parse_data( $data ));
 	}
 
 	/**
@@ -336,13 +338,13 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function set_inactive( $id ) {
 
-		do_action('nnr_data_man_before_db_set_inactive');
+		do_action('nnr_data_man_before_db_set_inactive_v1');
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_after_db_set_inactive_query', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 0 WHERE `id` = %d"), $id));
+		$result = $wpdb->query( apply_filters('nnr_data_man_after_db_set_inactive_query_v1', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 0 WHERE `id` = %d"), $id));
 
-		do_action('nnr_data_man_after_db_set_inactive');
+		do_action('nnr_data_man_after_db_set_inactive_v1');
 
 		return $result;
 
@@ -358,15 +360,15 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function get_data_from_date_range( $start_date, $end_date ) {
 
-		do_action('nnr_data_man_before_db_get_data_from_date_range');
+		do_action('nnr_data_man_before_db_get_data_from_date_range_v1');
 
 		global $wpdb;
 
-		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_data_from_date_range_query', $wpdb->prepare( "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1 AND `start_date` <= %s AND `end_date` >= %s", $start_date, $end_date )), 'ARRAY_A');
+		$data = $wpdb->get_results( apply_filters('nnr_data_man_db_get_data_from_date_range_query_v1', $wpdb->prepare( "SELECT * FROM `" . $this->get_table_name() . "` WHERE `active` = 1 AND `start_date` <= %s AND `end_date` >= %s", $start_date, $end_date )), 'ARRAY_A');
 
-		do_action('nnr_data_man_after_db_get_data_from_date_range');
+		do_action('nnr_data_man_after_db_get_data_from_date_range_v1');
 
-		return apply_filters('nnr_data_man_db_get_data_from_date_range', $this->parse_data( $data ));
+		return apply_filters('nnr_data_man_db_get_data_from_date_range_v1', $this->parse_data( $data ));
 	}
 
 	/**
@@ -378,13 +380,13 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function delete_data( $id ) {
 
-		do_action('nnr_data_man_before_db_delete_data');
+		do_action('nnr_data_man_before_db_delete_data_v1');
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_db_delete_data_query', $wpdb->prepare("DELETE FROM `" . $this->get_table_name() . "` WHERE `id` = %d"), $id));
+		$result = $wpdb->query( apply_filters('nnr_data_man_db_delete_data_query_v1', $wpdb->prepare("DELETE FROM `" . $this->get_table_name() . "` WHERE `id` = %d"), $id));
 
-		do_action('nnr_data_man_after_db_delete_data');
+		do_action('nnr_data_man_after_db_delete_data_v1');
 
 		return $result;
 
@@ -398,7 +400,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @return void
 	 */
 	function validate_data( $data ){
-		return apply_filters('nnr_data_man_db_validate_data', array_merge($this->default_data, $data));
+		return apply_filters('nnr_data_man_db_validate_data_v1', array_merge($this->default_data, $data));
 	}
 
 	/**
@@ -410,7 +412,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function parse_data( $data ) {
 
-		do_action('nnr_data_man_before_db_parse_data');
+		do_action('nnr_data_man_before_db_parse_data_v1');
 
 		$parsed_data = array();
 
@@ -429,9 +431,9 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 			$parsed_data[] = $entry;
 		}
 
-		do_action('nnr_data_man_after_db_parse_data');
+		do_action('nnr_data_man_after_db_parse_data_v1');
 
-		return apply_filters('nnr_data_man_db_parse_data', $parsed_data);
+		return apply_filters('nnr_data_man_db_parse_data_v1', $parsed_data);
 
 	}
 
@@ -446,7 +448,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 
 		global $wpdb;
 
-		return apply_filters('nnr_data_man_db_get_table_name', $wpdb->prefix . $this->table_name);
+		return apply_filters('nnr_data_man_db_get_table_name_v1', $wpdb->prefix . $this->table_name);
 	}
 
 }

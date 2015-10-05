@@ -1,6 +1,6 @@
 <?php $data_manager = new NNR_Data_Manager_v1( self::$data_manager_table_name ); ?>
 
-<?php do_action('nnr_data_man_before_view_status_controls'); ?>
+<?php do_action('nnr_data_man_before_view_status_controls_v1'); ?>
 
 <!-- Show based on status -->
 
@@ -8,8 +8,8 @@
 <a class="<?php echo ( isset( $_GET['status'] ) && $_GET['status'] == 'active' ? 'nnr-current-tab' : 'nnr-tab' ); ?>" href="<?php echo admin_url() . 'admin.php?page=' . self::$dashboard_page; ?>&status=active"> <?php _e('Active', self::$text_domain); ?> <span class="<?php echo self::$prefix_dash . 'count'; ?>">(<?php echo count($data_manager->get_active_data()); ?>)</span></a> |
 <a class="<?php echo ( isset( $_GET['status'] ) && $_GET['status'] == 'inactive' ? 'nnr-current-tab' : 'nnr-tab' ); ?>" href="<?php echo admin_url() . 'admin.php?page=' . self::$dashboard_page; ?>&status=inactive"> <?php _e('Inactive', self::$text_domain); ?> <span class="<?php echo self::$prefix_dash . 'count'; ?>">(<?php echo count($data_manager->get_inactive_data()); ?>)</span></a>
 
-<?php do_action('nnr_data_man_after_view_status_controls'); ?>
-<?php do_action('nnr_data_man_before_view_table'); ?>
+<?php do_action('nnr_data_man_after_view_status_controls_v1'); ?>
+<?php do_action('nnr_data_man_before_view_table_v1'); ?>
 
 <!-- Show the table -->
 
@@ -28,7 +28,7 @@
 	?>
 </form>
 
-<?php do_action('nnr_data_man_after_view_table'); ?>
+<?php do_action('nnr_data_man_after_view_table_v1'); ?>
 
 <!-- Modal Popup for the delete confirmation -->
 

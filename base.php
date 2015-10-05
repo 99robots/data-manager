@@ -52,7 +52,7 @@ class NNR_Data_Manager_Base_v1 {
 	 * @return void
 	 */
 	function sanitize_value( $value, $html = false ) {
-		return apply_filters('nnr_data_man_sanitize_value', stripcslashes( sanitize_text_field( $value ) ) );
+		return apply_filters('nnr_data_man_sanitize_value_v1', stripcslashes( sanitize_text_field( $value ) ) );
 	}
 
 }
