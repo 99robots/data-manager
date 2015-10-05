@@ -125,6 +125,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 */
 	function __construct( $table_name, $args = array(), $single = 'data', $plural = 'data'  ) {
 
+		do_action('nnr_data_man_before_new_table_controller');
+
 		$args = apply_filters('nnr_data_manager_dashboard_table_args', $args, array(
 			'prefix'			=> '',
 			'text_domain'		=> '',
@@ -152,6 +154,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
             'plural'    => $plural,    		//plural name of the listed records
             'ajax'      => false        	//does this table support ajax?
         ) );
+
+        do_action('nnr_data_man_after_new_table_controller');
     }
 
     /**
@@ -162,11 +166,15 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
      */
     function include_scripts() {
 
+	    do_action('nnr_data_man_before_table_scripts');
+
 	    wp_register_style( 'data-manager-dashboard-css-v1', plugins_url( 'css/dashboard.css', dirname(__FILE__)) );
 		wp_enqueue_style( 'data-manager-dashboard-css-v1' );
 
 		wp_register_script( 'data-manager-dashboard-js-v1', plugins_url( 'js/dashboard.js', dirname(__FILE__)) );
 		wp_enqueue_script( 'data-manager-dashboard-js-v1' );
+
+		do_action('nnr_data_man_after_table_scripts');
 
     }
 
@@ -179,7 +187,7 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 * @return	N/A
 	 */
 	function no_items() {
-		_e( 'No data found.' );
+		apply_filters('nnr_data_man_table_no_items', _e( 'No data found.' ));
 	}
 
 	/**
@@ -191,6 +199,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 * @return	array An associative array containing column information: 'slugs'=>'Visible Titles'
 	 */
 	function get_columns(){
+
+		do_action('nnr_data_man_table_get_columns');
+
 		$columns = array(
 			'status'             => __( 'ON / OFF', $this->text_domain),
 			'name'               => __( 'Name', $this->text_domain),
@@ -200,7 +211,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 			'start_date'         => __( 'Start Date', $this->text_domain),
 			'end_date'        	 => __( 'End Date', $this->text_domain),
 		);
-		return $columns;
+
+		return apply_filters('nnr_data_man_table_get_columns', $columns);
 	}
 
 	/**
@@ -214,7 +226,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 */
 	function column_default( $item, $column_name ) {
 
-		return $item[$column_name];
+		do_action('nnr_data_man_table_column_default', $item, $column_name);
+
+		return apply_filters('nnr_data_man_table_column_default', $item[$column_name]);
 	}
 
 	/**
@@ -227,6 +241,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 * @return	string Text or HTML to be placed inside the column <td>
 	 */
 	function column_status( $item ) {
+
+		do_action('nnr_data_man_before_table_column_status');
 
 		// Active
 
@@ -243,7 +259,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 			$data = '<a href="' . get_admin_url() . 'admin.php?page=' . $this->dashboard_page . '&action=activate&data_id=' . $item['id'] . '&wp_nonce=' . wp_create_nonce($this->prefix . 'activate') . '" data-id="' . $item['id'] . '" data-status="activate" class="nnr-change-status fa fa-2x fa-toggle-off" data-toggle="tooltip" data-placement="bottom" title="' . __('Activate', $this->text_domain) . '"></a>';
 		}
 
-        return $data;
+		do_action('nnr_data_man_after_table_column_status');
+
+        return apply_filters('nnr_data_man_table_column_status', $data);
 
 	}
 
@@ -257,6 +275,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 * @return	string Text or HTML to be placed inside the column <td>
 	 */
 	function column_name( $item ) {
+
+		do_action('nnr_data_man_before_table_column_name');
 
 		// Build row actions
 
@@ -301,13 +321,15 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
             get_admin_url() . 'admin.php?page=' . $this->dashboard_page . '&action=delete&data_id=' . $item['id'] . '&wp_nonce=' . wp_create_nonce($this->prefix . 'delete')
         );
 
+        do_action('nnr_data_man_after_table_column_name');
+
         // Return the title contents
 
-        return sprintf('%1$s <small style="opacity: 0.5;">id:(%2$s)</small> %3$s',
+        return apply_filters('nnr_data_man_table_column_name', sprintf('%1$s <small style="opacity: 0.5;">id:(%2$s)</small> %3$s',
             '<span><a href="?page=' . $this->add_edit_page . '&action=edit&data_id=' . $item['id'] . '&wp_nonce=' . wp_create_nonce($this->prefix . 'edit') . '">' . $item['name'] . '</a></span>',
             $item['id'],
             $this->row_actions($actions)
-        );
+        ));
 	}
 
 	/**
@@ -321,6 +343,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 */
 	function column_impressions( $item ) {
 
+		do_action('nnr_data_man_before_table_column_impressions');
+
 		$stats_tracker = new NNR_Stats_Tracker_v1($this->stats_table_name);
 		$stats = $stats_tracker->get_stats(null, null, $item['id']);
 
@@ -329,7 +353,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 		    $impressions_total += $stat['impressions'];
 		}
 
-        return number_format($impressions_total);
+		do_action('nnr_data_man_after_table_column_impressions');
+
+        return apply_filters('nnr_data_man_table_column_impressions', number_format($impressions_total));
 	}
 
 	/**
@@ -343,6 +369,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 */
 	function column_conversions( $item ) {
 
+		do_action('nnr_data_man_after_table_column_conversions');
+
 		$stats_tracker = new NNR_Stats_Tracker_v1($this->stats_table_name);
 		$stats = $stats_tracker->get_stats(null, null, $item['id']);
 
@@ -351,7 +379,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 		    $impressions_total += $stat['conversions'];
 		}
 
-        return number_format($impressions_total);
+		do_action('nnr_data_man_before_table_column_conversions');
+
+        return apply_filters('nnr_data_man_table_column_conversions', number_format($impressions_total));
 	}
 
 	/**
@@ -365,6 +395,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 */
 	function column_conversion_rate( $item ) {
 
+		do_action('nnr_data_man_before_table_column_conversion_rate');
+
 		$stats_tracker = new NNR_Stats_Tracker_v1($this->stats_table_name);
 		$stats = $stats_tracker->get_stats(null, null, $item['id']);
 
@@ -377,7 +409,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 
         $ctr = $impressions_total != 0 ? round(($conversions_total/$impressions_total) * 100, 2) : 0;
 
-        return $ctr . '%';
+        do_action('nnr_data_man_after_table_column_conversion_rate');
+
+        return apply_filters('nnr_data_man_table_column_conversion_rate', $ctr . '%');
 	}
 
 	/**
@@ -391,7 +425,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 */
 	function column_start_date( $item ) {
 
-		return $item['start_date'];
+		do_action('nnr_data_man_table_column_start_date');
+
+		return apply_filters('nnr_data_man_table_column_start_date', $item['start_date']);
 	}
 
 	/**
@@ -405,7 +441,9 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 */
 	function column_end_date( $item ) {
 
-		return $item['end_date'];
+		do_action('nnr_data_man_table_column_end_date');
+
+		return apply_filters('nnr_data_man_table_column_end_date', $item['end_date']);
 	}
 
 	/**
@@ -417,6 +455,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 * @return	N/A
 	 */
 	function prepare_items() {
+
+		do_action('nnr_data_man_before_table_prepare_items');
 
 		$data_manager = new NNR_Data_Manager_v1( $this->table_name );
 
@@ -442,6 +482,8 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	        $this->items = $data_manager->get_inactive_data();
         }
 
+        $this->items = apply_filters('nnr_data_man_table_items', $this->items);
+
         $total_items = count($this->items);
 
         /**
@@ -449,13 +491,15 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
          * to ensure that the data is trimmed to only the current page. We can use
          * array_slice() to
          */
-        $data = array_slice($this->items,(($current_page-1)*$per_page),$per_page);
+        $data = apply_filters('nnr_data_man_table_data', array_slice($this->items,(($current_page-1)*$per_page),$per_page));
 
-        $this->set_pagination_args( array(
-            'total_items' => $total_items,                  //WE have to calculate the total number of items
-            'per_page'    => $per_page,                     //WE have to determine how many items to show on a page
-            'total_pages' => ceil($total_items/$per_page)   //WE have to calculate the total number of pages
-        ) );
+        $this->set_pagination_args( apply_filters('nnr_data_man_table_set_pagination_args', array(
+            'total_items' => $total_items,
+            'per_page'    => $per_page,
+            'total_pages' => ceil($total_items/$per_page)
+        ) ) );
+
+        do_action('nnr_data_man_after_table_prepare_items');
 	}
 
 	/**
@@ -467,7 +511,7 @@ class NNR_Data_Manager_List_Table_v1 extends WP_List_Table {
 	 * @return array
 	 */
 	public function get_table_classes() {
-	    return array('table table-striped table-responsive');
+	    return apply_filters('nnr_data_man_table_get_table_classes', array('table table-striped table-responsive'));
 	}
 
 	/**

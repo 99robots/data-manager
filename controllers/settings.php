@@ -51,10 +51,15 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @return void
 	 */
 	function __construct( $prefix = '', $text_domain = '' ) {
+
+		do_action('nnr_data_man_before_new_settings_controller');
+
 		$this->prefix = $prefix;
 		$this->text_domain = $text_domain;
 
 		$this->include_scripts();
+
+		do_action('nnr_data_man_after_new_settings_controller');
 	}
 
 	/**
@@ -64,6 +69,8 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @return void
 	 */
 	function include_scripts() {
+
+		do_action('nnr_data_man_before_settings_scripts');
 
 		wp_register_style( 'bootstrap-datepicker-css', plugins_url( 'css/bootstrap-datetimepicker.min.css', dirname(__FILE__)) );
 		wp_enqueue_style( 'bootstrap-datepicker-css' );
@@ -76,9 +83,11 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 
 		wp_register_script( 'data-manager-settings-js', plugins_url( 'js/settings.js', dirname(__FILE__)), array('jquery', 'bootstrap-datepicker-js') );
 		wp_enqueue_script( 'data-manager-settings-js' );
-		wp_localize_script( 'data-manager-settings-js', 'nnr_data_manager_data' , array(
+		wp_localize_script( 'data-manager-settings-js', 'nnr_data_manager_data' , apply_filters('nnr_data_man_settings_script_data', array(
 			'prefix'	=> $this->prefix,
-		));
+		)));
+
+		do_action('nnr_data_man_after_settings_scripts');
 
 	}
 
@@ -93,10 +102,13 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function display_all_settings( $data_settings, $args = array('default' => array(), 'help-text' => array()) ) {
 
+		do_action('nnr_data_man_before_settings_display_all');
+
 		echo $this->display_name($data_settings['name']);
 		echo $this->display_start_date($data_settings['start_date']);
 		echo $this->display_end_date($data_settings['end_date']);
 
+		do_action('nnr_data_man_after_settings_display_all');
 	}
 
 	/**
@@ -106,6 +118,8 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @return void
 	 */
 	function display_name( $name, $default = '', $help_text = null, $format = 'inline' ) {
+
+		do_action('nnr_data_man_before_settings_name');
 
 		if ( isset($help_text) ) {
 			$help_text = '<em class="help-block">' . __($help_text, $this->text_domain) . '</em>';
@@ -128,7 +142,9 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 			'</div>';
 		}
 
-		return $code;
+		do_action('nnr_data_man_after_settings_name');
+
+		return apply_filters('nnr_data_man_settings_name', $code);
 	}
 
 	/**
@@ -138,6 +154,8 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @return void
 	 */
 	function display_start_date( $start_date, $default = null, $help_text = null, $format = 'inline' ) {
+
+		do_action('nnr_data_man_before_settings_start_date');
 
 		if ( !isset($default) ) {
 			$default = date('m/d/Y h:i A', strtotime(current_time('mysql')));
@@ -171,7 +189,9 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 			'</div>';
 		}
 
-		return $code;
+		do_action('nnr_data_man_after_settings_start_date');
+
+		return apply_filters('nnr_data_man_settings_start_date', $code);
 
 	}
 
@@ -182,6 +202,8 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 * @return void
 	 */
 	function display_end_date( $end_date, $default = null, $help_text = null, $format = 'inline' ) {
+
+		do_action('nnr_data_man_before_settings_end_date');
 
 		if ( !isset($default) ) {
 			$default = date("m/d/Y h:i A", mktime(0, 0, 0, date("m"), date("d"), date("Y")+20));
@@ -215,7 +237,9 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 			'</div>';
 		}
 
-		return $code;
+		do_action('nnr_data_man_after_settings_end_date');
+
+		return apply_filters('nnr_data_man_settings_end_date', $code);
 
 	}
 
@@ -227,11 +251,11 @@ class NNR_Data_Manager_Settings_v1 extends NNR_Data_Manager_Base_v1 {
 	 */
 	function get_data() {
 
-		return array(
+		return apply_filters('nnr_data_man_settings_get_data', array(
 			'name'			=> isset($_POST[$this->prefix . 'name']) ? $this->sanitize_value($_POST[$this->prefix . 'name']) : '',
 			'start_date'	=> isset($_POST[$this->prefix . 'start-date']) ? $this->sanitize_value($_POST[$this->prefix . 'start-date']) : '',
 			'end_date'		=> isset($_POST[$this->prefix . 'end-date']) ? $this->sanitize_value($_POST[$this->prefix . 'end-date']) : '',
-		);
+		));
 
 	}
 
