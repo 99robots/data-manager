@@ -300,7 +300,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_db_set_active_query_v1', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 1 WHERE `id` = %d"), $id));
+		$result = $wpdb->query( apply_filters('nnr_data_man_db_set_active_query_v1', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 1 WHERE `id` = %d", $id ) ) );
 
 		do_action('nnr_data_man_after_db_set_active_v1');
 
@@ -342,7 +342,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_after_db_set_inactive_query_v1', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 0 WHERE `id` = %d"), $id));
+		$result = $wpdb->query( apply_filters('nnr_data_man_after_db_set_inactive_query_v1', $wpdb->prepare("UPDATE `" . $this->get_table_name() . "` SET `active` = 0 WHERE `id` = %d", $id ) ) );
 
 		do_action('nnr_data_man_after_db_set_inactive_v1');
 
@@ -384,7 +384,7 @@ class NNR_Data_Manager_v1 extends NNR_Data_Manager_Base_v1 {
 
 		global $wpdb;
 
-		$result = $wpdb->query( apply_filters('nnr_data_man_db_delete_data_query_v1', $wpdb->prepare("DELETE FROM `" . $this->get_table_name() . "` WHERE `id` = %d"), $id));
+		$result = $wpdb->query( apply_filters('nnr_data_man_db_delete_data_query_v1', $wpdb->prepare("DELETE FROM `" . $this->get_table_name() . "` WHERE `id` = %d", $id ) ) );
 
 		do_action('nnr_data_man_after_db_delete_data_v1');
 
